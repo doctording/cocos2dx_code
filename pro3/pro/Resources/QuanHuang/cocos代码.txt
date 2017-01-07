@@ -1,0 +1,28 @@
+auto sprite = Sprite::create("anim_fight\\1.png");
+	sprite->setPosition(Point(visibleSize.width / 2, visibleSize.height / 4 * 3));
+	this->addChild(sprite);
+
+	// 纹理缓冲 加载plist文件
+	SpriteFrameCache *spriteFrameCache = SpriteFrameCache::getInstance();
+	spriteFrameCache->addSpriteFramesWithFile("quanhuang.plist");
+
+	int index = 1;
+	SpriteFrame* frame = NULL;
+	Vector<SpriteFrame *> frameArray; //plist里面的精灵帧
+
+	do{
+		__String str = __String::createWithFormat("%d.png", index)->getCString();
+		frame = spriteFrameCache->getSpriteFrameByName(str.getCString());
+		if (frame == NULL)
+			break;
+		frameArray.pushBack(frame);
+		index++;
+	} while (true);
+
+	Animation* animation = Animation::createWithSpriteFrames(frameArray);
+	animation->setLoops(1);
+	animation->setDelayPerUnit(1.6f/16.0f);  // 这个动画包含16帧，将会持续1.6秒
+	animation->setRestoreOriginalFrame(false); // 16帧播放完之后返回到第一帧 
+	
+	//Animate* action = Animate::create(animation);
+	sprite->runAction(RepeatForever::create(Animate::create(animation)));
